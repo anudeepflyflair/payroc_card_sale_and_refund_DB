@@ -1,3 +1,4 @@
+# Get the AWS caller identity
 data "aws_caller_identity" "current" {}
 
 # Create IAM role for Lambda with a trust policy to allow Lambda service
@@ -18,10 +19,10 @@ resource "aws_iam_role" "lambda_execution_role" {
   })
 }
 
-# IAM Policy to allow access to all DynamoDB tables in the account
+# IAM Policy to allow access to the payroccardsale table
 resource "aws_iam_policy" "dynamodb_policy" {
   name        = "DynamoDBAccessPolicy"
-  description = "Policy to allow Lambda functions to access all DynamoDB tables"
+  description = "Policy to allow Lambda functions to access the payroccardsale table"
 
   policy = jsonencode({
     Version = "2012-10-17",
@@ -36,8 +37,13 @@ resource "aws_iam_policy" "dynamodb_policy" {
         ],
         Effect   = "Allow",
         Resource = [
-          # Allow access to all DynamoDB tables in the account
-          "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/*"
+          # Allow access to the payroccardsale table
+          "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/payroccardsale",
+          "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/payroccardsalelogs",
+          "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/payroccardrefund",
+          "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/payroccardrefundlogs",
+          "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/payroccardvoid",
+          "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/payroccardvoidlogs"
         ]
       }
     ]
