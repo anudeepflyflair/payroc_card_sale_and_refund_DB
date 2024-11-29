@@ -37,7 +37,6 @@ resource "aws_iam_policy" "dynamodb_policy" {
         ],
         Effect   = "Allow",
         Resource = [
-          # Allow access to the payroccardsale table
           "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/payroccardsale",
           "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/payroccardsalelogs",
           "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/payroccardrefund",
@@ -45,6 +44,11 @@ resource "aws_iam_policy" "dynamodb_policy" {
           "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/payroccardvoid",
           "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/payroccardvoidlogs"
         ]
+      },
+      {
+        Action = "dynamodb:PutItem",
+        Effect = "Allow",
+        Resource = "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/payroccardsale"
       }
     ]
   })
