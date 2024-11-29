@@ -47,12 +47,6 @@ resource "aws_iam_policy" "dynamodb_policy" {
   })
 }
 
-# Attach the policy to the Lambda execution role
-resource "aws_iam_role_policy_attachment" "lambda_dynamodb_policy_attachment" {
-  role       = aws_iam_role.lambda_execution_role.name
-  policy_arn = aws_iam_policy.dynamodb_policy.arn
-}
-
 # IAM Policy to allow access to the payroccardlogs table
 resource "aws_iam_policy" "dynamodb_policy_logs" {
   name        = "DynamoDBAccessPolicyLogs"
@@ -81,7 +75,12 @@ resource "aws_iam_policy" "dynamodb_policy_logs" {
   })
 }
 
-# Attach the policy to the Lambda execution role
+# Attach the policies to the Lambda execution role
+resource "aws_iam_role_policy_attachment" "lambda_dynamodb_policy_attachment" {
+  role       = aws_iam_role.lambda_execution_role.name
+  policy_arn = aws_iam_policy.dynamodb_policy.arn
+}
+
 resource "aws_iam_role_policy_attachment" "lambda_dynamodb_policy_logs_attachment" {
   role       = aws_iam_role.lambda_execution_role.name
   policy_arn = aws_iam_policy.dynamodb_policy_logs.arn
